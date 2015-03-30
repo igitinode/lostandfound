@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="快易寻,注册">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>登录 - 快易寻</title>
+    <script type="text/javascript" src="/static/js/jquery/jquery-1.9.1.js"> </script>
+    <script type="text/javascript" src="/static/js/jquery/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"> </script>
+    <script type="text/javascript" src="/static/js/common/global.js"></script>
+    <script type="text/javascript" src="/static/js/nml/common/nml_head_top.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/main/nml_main.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/common/nml_head_top.css">
+    <link href="/static/css/global.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/static/css/login/login.css" rel="stylesheet" type="text/css" media="screen">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/jquery/jquery-ui-1.10.2.custom/themes/start/jquery-ui.min.css">
+</head>
+<body>
+    <div class="topest" id="head-top1" style="display: !none; width: 100%">
+        <div class="toph">
+            <span class="fr" id="head-top-right-span" style="margin-right: 10px;">
+                <a href="/lostandfound/register.html"><b class="white">注册</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span>
+                <a onclick="login();" href="#"><b class="white">登录</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span> 
+                <a href="/lostandfound/quickRegGoods.html" target="_blank"><b class="white">快速发布</b></a> 
+            </span>         
+        </div>
+    </div>
+    <br class="clear">
+    <div id="wrap_f">
+    <!--head-->
+        <div id="header" style="height: auto">
+            <div class="logo">
+                <a href="/lostandfound" class="logoA">
+                    <img src="/static/images/logo.png" alt="寻物启事|失物招领" class="BSHARE_DONTSHARE">
+                    <div style="position:relative;">
+                        <div style="position:absolute; left:150px; top:10px; font-weight:bold; color:#88A6E6;">BETA</div>
+                    </div>
+                </a>
+                <div class="path">
+                    <a href="/lostandfound">首页</a>
+                    <a>&gt;</a>
+                    <a>&gt;</a>
+                    <a>登录</a>
+                </div>
+            </div>
+        </div>
+    <!--end head-->
+        <div style="clear:both;"></div>
+        <div style="border-top: 3px solid #3366ff;"></div>
+        <div class="content">
+            <div class="con_left">
+                <img src="/static/images/login02.png" alt="导航">
+            </div>
+            <div class="con_right">
+                <div class="con_right_title"></div>
+                <div id="userLogin">
+                    <ul>
+                        <li>用户名：<input name="username" id="username" type="text" value="" placeholder="邮箱" class="inputTxt_128_22" title="输入用户名/邮箱"></li>
+                        <li>密&nbsp;&nbsp;&nbsp;码：<input name="password" id="password" type="password" placeholder="" title="输入密码"></li>
+                    </ul>
+                    <ol>
+                        <li><input type="checkbox" id="autoLoginFlag">&nbsp;下次自动登陆（公共场所慎用）</li>
+                        <li>
+                        <!--<input class="btn_07" value="登录" type="button" id="login_submit">-->
+                         <input class="btn03" value="" type="button" id="login_submit">
+                        </li><li><a href="/login/register.jspx?nav=register" onclick="">免费注册</a>|<a target="_blank" onclick="toFindPwd()" style="cursor: pointer;">忘记密码</a></li>
+                    </ol>
+                </div>
+                <div style="margin-left: 30px;margin-top: 15px;white-space: nowrap;">
+                    <div id="wb_connect_btn" style="float: left;margin-right: 10px"><div class="WB_loginButton WB_widgets"><a href="javascript:void(0);"><img src="http://timg.sjs.sinajs.cn/t4/appstyle/widget/images/loginButton/loginButton_24.png"></a></div></div>
+                    <div id="qq_LoginBtn" style="float: left;  "><a href="javascript:;" onclick="return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=100479159&amp;response_type=token&amp;scope=all&amp;redirect_uri=http%3A%2F%2Fwww.kuaiyixun.com%2Fqq_callback.html', 'oauth2Login_10194' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');"><img src="http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_3.png" alt="QQ登录" border="0"></a></div>
+                </div>
+            </div>
+        </div>
+        <div style=" clear:both;"></div>
+    </div>
+    <div id="footer">
+        <p></p> 
+        <div style="text-align: center;width:100%">
+            <table width="55%" style="margin:auto">
+                 <tbody>
+                     <tr align="center">
+                        <td><a href="/lostandfound" class="pointer">首页</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript:showAboutUs();" class="pointer">关于我们</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript: showContactUs();" class="pointer">联系我们</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript:showReplyUs();" class="pointer">意见反馈</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript: disclaimers();" class="pointer">免责声明</a></td>
+                        <td>|</td>
+                        <td><a href="/qa/reg_QA.html" target="_blank" class="pointer">帮助中心</a></td>
+                        <td>|</td> 
+                        <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank">关注我们</a></td>
+                        <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank" title="官方微博关注"> <img alt="官方微博" src="/static/images/wb-share/wb_LOGO_24x24.png"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+        </div>      
+        <p></p>
+        <p style="margin-top: 10px;margin-bottom: 15px">在哪儿 Copyright &copy;  2014-2015  <a href="/lostandfound" title="快易寻 - 寻物启事与失物招领平台">Zainar.com</a>  All rights reserved.    辽ICP证 暂无备号</p> 
+        <p></p>
+    </div>
+    <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="快易寻,注册">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>登录 - 快易寻</title>
+    <script type="text/javascript" src="/static/js/jquery/jquery-1.9.1.js"> </script>
+    <script type="text/javascript" src="/static/js/jquery/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"> </script>
+    <script type="text/javascript" src="/static/js/common/global.js"></script>
+    <script type="text/javascript" src="/static/js/my97date/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/static/js/nml/common/nml_head_top.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/main/nml_main.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/common/nml_head_top.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/global.css">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/jquery/jquery-ui-1.10.2.custom/themes/start/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/goods/fast_sub02.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/my97date/My97DatePicker/skin/WdatePicker.css">
+
+</head>
+<body>
+    <div class="topest" id="head-top1" style="display: !none; width: 100%">
+        <div class="toph">
+            <span class="fr" id="head-top-right-span" style="margin-right: 10px;">
+                <a href="/lostandfound/register.html"><b class="white">注册</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span>
+                <a onclick="login();" href="#"><b class="white">登录</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span> 
+                <a href="/lostandfound/quickRegGoods.html" target="_blank"><b class="white">快速发布</b></a> 
+            </span>         
+        </div>
+    </div>
+    <br class="clear">
+    <div id="wrap_f">
+        <div id="header" style="height: auto">
+            <div class="logo">
+                <a href="/lostandfound" class="logoA">
+                    <img src="/static/images/logo.png" alt="寻物启事|失物招领" class="BSHARE_DONTSHARE">
+                    <div style="position:relative;">
+                        <div style="position:absolute; left:150px; top:10px; font-weight:bold; color:#88A6E6;">BETA</div>
+                    </div>
+                </a>
+                <div class="path">
+                    <a href="">首页</a>
+                    <a>&gt;</a>
+                    <a>&gt;</a>
+                    <a>快速发布</a>
+                </div>
+            </div>
+        </div>
+        <div class="address_search">
+            <ul class="rel_cee" id="change_page">
+                <li id="lostli" class="active_00 active" onclick="" title="寻物启事">报告丢失</li>
+                <li id="getli" class="active_01" onclick="" title="失物招领">报告捡到</li>
+            </ul>
+            <div id="page_content">
+                <div class="page_con" style="padding-left: 20px">
+                    <table cellpadding="0" border="0" width="960px">
+                        <tbody>
+                            <tr>
+                                <td width="64"> 类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</td>
+                                <td width="892">
+                                    <select id="goodstype" name="goodstype" style="font-size: 12px;">
+                                        <option value="1">物品</option>
+                                        <option value="2">宠物</option>
+                                        <option value="3">寻人</option>
+                                    </select>   
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="64"> 标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题：</td>
+                                <td width="892">
+                                    <input type="text" name="name" id="name" value="" class="input01 ui-autocomplete-input" title="输入长度不能超过15个汉字" size="30" maxlength="15" onblur="checkNull(this,'name-msg-span','标题不能为空！')" autocomplete="off"><span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span> 
+                                    <span style="color: red">*</span>
+                                    <input type="checkbox" id="iscard">含证件（身份证、银行卡等）
+                                    <span id="name-msg-span" style="color: red">标题不能为空！</span>
+                                </td>
+                            </tr>
+                            <tr id="cardTr" style="display: none;">
+                                <td width="64"> 证件号码：</td>
+                                <td width="892">
+                                    <select id="cardtype" name="cardtype" style="font-size: 12px;">
+                                        <option value="-1">类型</option>
+                                        <option value="1">身份证</option>
+                                        <option value="2">银行卡</option>
+                                        <option value="0">其他</option>
+                                    </select> 
+                                    <input type="text" name="cardnumber" id="cardnumber" value="" class="input01" style="width: 220px" title="输入长度不能超过50个汉字" size="30" maxlength="50" onblur="checkNull(this,'cardnumber-msg-span','证件号码不能为空！')"> 
+                                    <span style="color: red">*</span> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span id="reg-time-span" style="color: #cc0000;font-weight: bold;cursor:pointer" onclick="changeFlag(this);" title="点击切换">丢失</span>时间：
+                                </td>
+                                <td>
+                                    <input type="text" name="getorlostdate" id="getorlostdate" style="width: 92px;line-height:normal" class="temptime Wdate" onfocus="WdatePicker({el:'getorlostdate',isShowWeek:true,highLineWeekDay:'true',readOnly:false,isShowClear:false,dateFmt:'yyyy-MM-dd',skin:'default',maxDate:'%y-%M-%d'})" onblur="checkNull(this,'getorlostdate-msg-span','时间不能为空！')">
+                                    <span style="color: red">*</span>
+                                    <span id="getorlostdate-msg-span" style="color: red"></span>                               
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> 详细地点：</td>
+                                <td>
+                                    <input id="areacorner" type="text" title="输入长度不能超过50个汉字" size="50" maxlength="100" value="" onblur="checkNull(this,'areacorner-msg-span','详细地点不能为空！')">
+                                    <span style="color: red">*</span>
+                                    <span id="areacorner-msg-span" style="color: red">详细地点不能为空！</span>
+                                </td>
+                            </tr>
+                            <tr>
+                               <td valign="top"> 详细描述：</td>
+                               <td>
+                                    <span id="sprytextarea3">
+                                        <label for="textarea1"></label>
+                                        <textarea rows="5" cols="45" class="text_eara emotion" name="goodsdescribe" id="goodsdescribe" title="输入长度不能超过500个汉字" onkeydown="LimitTextArea(this,500)" onkeyup="LimitTextArea(this,500)" onkeypress="LimitTextArea(this,500)" onfocus="goodsDescribeFocus('goodsdescribe','详细描述','颜色，形状，大小，规格，特殊标记等。建议在下方上传图片。若含证件，请注明姓名，在上方 《标题》 一行后面勾选《含证件》，查询或登记号码。');" onblur="goodsDescribeBlur('goodsdescribe','详细描述','颜色，形状，大小，规格，特殊标记等。建议在下方上传图片。若含证件，请注明姓名，在上方 《标题》 一行后面勾选《含证件》，查询或登记号码。');"></textarea>              
+                                        <span style="color: red;">*</span>
+                                        <span id="goodsdescribe-msg-span" style="color: red"></span>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top"> 图片上传：</td>
+                                <td valign="top">
+                                    <div class="button" style="width:500px;height:40px;margin-top:0px">
+                                        <input id="uploadGoodsImgBtn" border="0" type="button" value="上传图片" name="myfiles" class="sub_btn ">
+                                        <span style="color: #999">(格式：jpg、png、jpeg、gif ; 大小  : 限制在1M以内)</span>
+                                    </div>
+                                    <div id="uploadGoodsImgFilesMsg" style="color: red"></div>
+                                    <table id="uploadGoodsImgFilesInfo" border="0" style="width:60%"></table>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td> 备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注：</td>
+                                <td>
+                                <input type="text" name="remark" id="remark" class="input01" title="输入长度不能超过100个汉字" maxlength="200" size="50"> 
+                                </td>
+                            </tr>
+                            <tr id="" height="" style="border:solid 0px red">
+                                <td width="" colspan="2" height="0px" style="border:solid 0px red;height:0px">
+                                    <table id="contactTable" width="80%" border="0" style="border:solid 0px red;margin-left:-8px">
+                                        <tbody></tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="left" style="border:solid 0px red ;text-align: left">
+                                    <table id="userRegTable" width="100%" style="border:solid 0px red;margin-left: 0px;display:" border="0">    
+                                        <tbody>
+                                            <tr>
+                                                <td width="62" style="" align="">用&nbsp;&nbsp;户&nbsp;名：</td>
+                                                <td width="856">
+                                                    <input type="text" name="username" id="username" title="输入正确邮箱" onfocus="goodsDescribeFocus('username','用户名','(勾选：当其他人浏览此信息时不会看到该邮箱。发布后可在“我的快易寻”修改。)');" onblur="checkUserName(this);goodsDescribeBlur('username','用户名','(勾选：当其他人浏览此信息时不会看到该邮箱。发布后可在“我的快易寻”修改。)');" style="margin-left: 4px;"> 
+                                                    <span style="color: red">*邮箱</span><!-- 默认公开邮箱 -->
+                                                    <span id="username-msg-span-validate" style="color: rgb(255, 0, 0);">请输入邮箱（用户名）！</span>
+                                                    <span id="username-msg-span" style="color: red">用户名不能为空！</span>
+                                                    <span>
+                                                        <input type="checkbox" id="isOpenMail" style="margin-left: 4px;">不公开</span><div id="username-msg-div" style="color: #cc0000"></div>
+                                                </td> 
+                                            </tr>
+                                            <tr>
+                                                <td>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</td>
+                                                <td>
+                                                    <input type="text" name="hypocorism" id="hypocorism" onblur="checkHypocorism(this);" title="输入昵称" style="margin-left: 4px;"> 
+                                                    <span style="color: red">*</span>
+                                                    <span id="hypocorism-msg-span" style="color: rgb(255, 0, 0);">昵称不能为空！！</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</td>
+                                                <td>
+                                                    <input type="password" name="password" title="输入密码" id="password" onblur="checkNull(this,'password-msg-span','密码不能为空！')" style="margin-left: 4px;"><span style="color: red">*</span>
+                                                    <span id="password-msg-span" style="color: red">密码不能为空！</span>
+                                                    <div id="passwordStrengthDiv" class="is0" style="margin-left: 4px"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>确认密码：</td>
+                                                <td>
+                                                    <input type="password" name="c_password" id="c_password" onblur="checkNull(this,'c_password-msg-span','确认密码不能为空！')" title="输入确认密码" style="margin-left: 4px;"> <span style="color: red">*</span>
+                                                    <span id="c_password-msg-span" style="color: red">确认密码不能为空！</span>
+                                                </td>
+                                            </tr>
+                                            <tr id="appendTr02">
+                                                <td>验&nbsp;&nbsp;证&nbsp;码：</td>
+                                                <td>
+                                                    <input type="text" name="appendcode" title="输入验证码" id="appendcode" size="10" onblur="checkNull(this,'appendcode-msg-span','验证码不能为空！')" style="margin-left: 4px;">
+                                                    <img src="./static/jsp/common/image.jsp?it=0.5881452853791416" align="absmiddle" id="appendcodeimg" alt="验证码"> 
+                                                    <span style="color: red">*</span>
+                                                    <span onclick="changeAppendcodeImg_goodsReg('userRegTable')" style="cursor: pointer;color:blue">
+                                                                看不清，换一张       
+                                                    </span>
+                                                    <span id="appendcode-msg-span" style="color: red"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>服务协议：</td>
+                                                <td>
+                                                    <textarea name="xieyi" cols="" rows="" readonly="readonly" style="width:615px; height:70px; overflow-y:visible;margin-left: 4px">快易寻网站平台使用许可协议快易寻网站平台使用许可协议（以下简称"协议"）是您与快易寻网站平台（以下简称"平台"或"产品"）版权所有者之间的法律协议。您在使用该平台之前，必须阅读此协议。若有不同意之处，请立即停止注册，不要使用该平台。1.版权该平台包括但不限于本产品中所含的任何图象、照片、文字和附加程序均由版权人快易寻拥有。通过该平台可访问的内容的一切所有权和知识产权均属于各自内容的所有者拥有并可能受适用著作权或其它知识产权法律和条约的保护。本《协议》不授予您使用这些内容的权利。2．隐私权快易寻尊重并保护平台用户的个人隐私权，您注册的电子邮箱，昵称，联系方式等个人资料，非经您亲自许可或根据相关法律、法规的强制性规定，以及快易寻为维护改进平台服务为目的，不会主动地泄露给第三方。在发布信息过程中若不希望公开联系方式，请选择不公开选项。3. 账户、密码安全用户完成注册程序获得账户、密码后，应保护自身的密码安全，并对所有在用户账户下使用的行为包括但不限于用户自身和任何第三方在用户账户下的行为承担全部责任。用户一旦知道账户存在未经用户授权使用的行为，应立即通知快易寻。用户确认并同意快易寻可以为维护改进服务需要，使用用户的账户和密码登陆服务。4. 责任此平台旨在帮助失主找回丢失物品，但不提供任何第三方的物品鉴定。丢失物品一方与捡到物品一方，可以通过平台提供的私信或者其他联系方式进行沟通确认，如若引起纠纷，平台不承担任何法律责任。网站平台管理员会不定期通过一定合法渠道进行收集寻物启事和失物招领信息，并在平台进行登记。如若涉及到隐私或版权问题，您可以通过平台的 ”问题反馈“ 与我们取得联系，您的反馈会第一时间得到处理。5. 尊重国家和他人合法权益快易寻特别提醒用户，使用互联网平台必须遵守国家有关的政策和法律，如刑法、国家安全法、保密法、计算机信息系统安全保护条例等，保护国家利益，保护国家安全，对于违法使用互联网络而引起的一切责任，由用户负全部责任。6.  授权变更版权人可能出于任何原因随时对授权进行更改或取消。 我们可能随时取消或暂停您的服务。我们有权在没有任何理由和/或通知的情形下随时终止或暂停对您的授权。授权一旦取消，您使用本软件产品的权利即刻终止。版权人行使修改或取消服务的权利不需对用户或任何第三方负责。7. 服务条款和其他政策的修改快易寻有权利以公告新协议的方式修改、变更本协议条款，用户有责任定期查看。如您不接受变更、修改后的协议条款和服务政策的，应立即停止使用本平台。以上协议各项内容最终解释权归快易寻网站平台所有者。</textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td valign="top"><input type="button" name="button" id="goods_submit" border="0" value="接受协议立即发布" class="sub_a sub_btn"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+            <p></p>
+            <div style="text-align: center;width:100%">
+                <table width="55%" style="margin:auto">
+                    <tbody>
+                        <tr align="center">
+                            <td><a href="/lostandfound" class="pointer">首页</a></td>
+                            <td>|</td>
+                            <td><a onclick="javascript:showAboutUs();" class="pointer">关于我们</a></td>
+                            <td>|</td>
+                            <td><a onclick="javascript: showContactUs();" class="pointer">联系我们</a></td>
+                            <td>|</td>
+                            <td><a onclick="javascript:showReplyUs();" class="pointer">意见反馈</a></td>
+                            <td>|</td>
+                            <td><a onclick="javascript: disclaimers();" class="pointer">免责声明</a></td>
+                            <td>|</td>
+                            <td><a href="/qa/reg_QA.html" target="_blank" class="pointer">帮助中心</a></td>
+                            <td>|</td> 
+                            <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank">关注我们</a></td>
+                            <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank" title="官方微博关注"> <img alt="官方微博" src="/static/images/wb-share/wb_LOGO_24x24.png"></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> 
+            </div>      
+            <p></p>
+            <p style="margin-top: 10px;margin-bottom: 15px">在哪儿 Copyright &copy;  2014-2015  <a href="/lostandfound" title="快易寻 - 寻物启事与失物招领平台">Zainar.com</a>  All rights reserved.    辽ICP证 暂无备号</p> 
+            <p></p>
+        <!-- 百度统计 -->
+        <script type="text/javascript">var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F67e23cf5c6b5f2e2f490011a39b79b8f' type='text/javascript'%3E%3C/script%3E"));</script><script src=" http://hm.baidu.com/h.js?67e23cf5c6b5f2e2f490011a39b79b8f" type="text/javascript"></script> 
+        </div>
+</body>

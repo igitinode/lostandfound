@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Expires" content="0">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta http-equiv="Pragma" content="no-cache">
+	<title>【在哪儿网】寻物启事，失物招领，通过网络让找回更简单。原来TA就在这里！</title>
+	<meta name="keywords" content="寻物启事，失物招领，失物招领网">
+	<meta name="description" content="通过寻物启事和失物招领平台在哪儿，丢失物品后，及时登记。">
+	<script type="text/javascript" src="/static/js/jquery/jquery-1.9.1.js"> </script>
+	<script type="text/javascript" src="/static/js/common/BrowserDetect.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/jquery.cookie.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/jquery.alerts-1.1/jquery.alerts.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery/artDialog4.1.7/artDialog.source.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/artDialog4.1.7/artDialogTools.js"> </script>
+	<script type="text/javascript" src="/static/js/common/common.js"> </script>
+	<script type="text/javascript" src="/static/js/common/common-extends.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/jquery-jscrollpane/jquery.mousewheel.js"> </script>
+	<script type="text/javascript" src="/static/js/jquery/jquery-jscrollpane/jquery.jscrollpane.min.js"> </script>
+	<script type="text/javascript" src="/static/js/sinaface/jquery.sinaEmotion.js"></script>
+	<script type="text/javascript" src="/static/js/jquery/zoomImgRollover/jquery.zoomImgRollover.js"></script>
+	<script type="text/javascript" src="/static/js/jquery/jquery.textchange.min.js"></script>
+	<script type="text/javascript" src="/static/js/common/titlebox/titleBox.js"></script>
+	<link rel="stylesheet" type="text/css" href="/static/js/jquery/artDialog4.1.7/skins/aero.css">
+	<link rel="stylesheet" type="text/css" href="/static/js/jquery/jquery.alerts-1.1/jquery.alerts.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/common/index.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="/static/js/common/titlebox/titleBox.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="/static/js/jquery/jquery-jscrollpane/jscrollpane.css" media="screen">
+	<link rel="stylesheet" type="text/css" href="/static/js/sinaface/jquery.sinaEmotion.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/global.css" media="screen">
+	<link rel="Shortcut icon" type="image/x-icon" href="/static/images/main/nml-4.ico">
+	<link rel="Bookmark" href="/static/images/main/nml-4.ico">
+	<script type="text/javascript">
+			var $ = jQuery.noConflict();  
+			$(document).ready(function(){
+				// 控制悬赏区和广告区图片的滚动
+			    $("#xs_pic").zoomImgRollover();
+			    $("#main_show1").zoomImgRollover();
+				 
+				//默认显示第一页
+			    //寻物启事 丢
+				showGoodsList(0,"goodslostlistdiv",1);
+				//寻物启事 捡到
+				showGoodsList(1,"goodsgetlistdiv",1);
+				//寻宠启事
+				showGoodsList(-1000,"goodsPetLostlistdiv",2);
+				//寻人启事
+				showGoodsList(-1000,"goodsPersonLostlistdiv",3);
+				//5  20  30秒钟更新一次    自动从服务器获取 
+				//悬赏区 显示 
+				showMoney("money_content_div"); 
+				//感恩墙 显示 
+				showWall("gnq_content_div"); 				 
+			});
+	</script>
+	<script type="text/javascript" src="/static/js/nml/main/jquery.DB_tabMotionBanner.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('.DB_tab25').DB_tabMotionBanner({
+				key:'b28551',
+				autoRollingTime:5000,                            
+				bgSpeed:2000,
+				motion:{
+					DB_1_1:{left:-50,opacity:0,speed:1000,delay:500},
+					DB_1_2:{left:-50,opacity:0,speed:1000,delay:1000},
+					DB_1_3:{left:100,opacity:0,speed:1000,delay:1500},
+					DB_2_1:{top:50,opacity:0,speed:1000,delay:500},
+					DB_2_2:{top:50,opacity:0,speed:1000,delay:1000},
+					DB_2_3:{top:100,opacity:0,speed:1000,delay:1500},
+					DB_3_1:{left:-50,opacity:0,speed:1000,delay:500},
+					DB_3_2:{top:50,opacity:0,speed:1000,delay:1000},
+					DB_3_3:{top:0,opacity:0,speed:1000,delay:1500},
+					DB_4_1:{top:50,opacity:0,speed:1000,delay:500},
+					DB_4_2:{top:0,opacity:0,speed:1000,delay:1000},
+					DB_4_3:{top:0,opacity:0,speed:1000,delay:1500},
+					DB_4_4:{top:30,opacity:0,speed:1000,delay:2000},
+					DB_4_5:{top:100,opacity:0,speed:1000,delay:3000},
+					end:null
+				}
+			});	
+		});
+
+		//查看详细
+		function showGoodsDetail(goodsid){
+			var url ="/goods/goods_details.jspx?goodsid="+goodsid;
+			window.open(url);
+		}
+
+		function showGoodsList(getorlost,listdiv,goodstype){
+			var text = "";
+			var icoClass="";
+			var topCount = 6; 
+			var limit = 14;
+			if(goodstype==2||goodstype==3){
+				topCount = 3; 
+				limit = 7;			}
+			//alert("a"+goodstype+"="+getorlost);
+			//alert(listdiv);
+			$("#"+listdiv).empty();
+			 var ul="<ul id='ul-"+getorlost+"' class='clear'></ul>";
+			 $(ul).appendTo($("#"+listdiv));
+			 //第一行 <li class="f14 fb "><span class="items pos_tit">物品名称</span><span class="lose_address">丢失地点</span><span>发布时间</span></li>
+			 $("<li class='f14 fb '><span class='items pos_tit'>标题</span><span class='lose_address'>"+text+"地点</span><span>发布时间</span></li>").appendTo($("#"+listdiv+" #ul-"+getorlost));
+			
+			
+		     queryData(limit,listdiv,getorlost,topCount,goodstype );
+			  
+			
+		}
+		function queryData(limit,listdiv,getorlost,topCount,goodstype ){
+			 //查询数据
+			// 	 alert("getorlost="+getorlost+"&goodstype="+goodstype+"&order=date&limit="+limit+"&topCount="+topCount)
+				
+			 $.ajax({
+				url:"/goods/queryMainPageGoodsByMap.json"
+				,data:"getorlost="+getorlost+"&goodstype="+goodstype+"&order=date&limit="+limit+"&topCount="+topCount
+				,async	:true
+				,success:function(result){
+					 //alert("getorlost="+getorlost+"&goodstype="+goodstype+"&order=date&limit="+limit+"&topCount="+topCount)
+					showHtml(result,listdiv,getorlost,topCount,goodstype );
+				}
+			 });
+		}
+
+		function showHtml(result,listdiv,getorlost,topCount,goodstype ){
+			// alert("b"+goodstype+"="+getorlost);
+			 var len = result.data.length ;
+		//	 var count = 0;
+			 for(var i =0;i<len;i++){
+				var goodsid = result.data[i].id;
+				var name = $.trim(result.data[i].name);
+				var l_getorlost = $.trim(result.data[i].getorlost);
+				if(l_getorlost==0){
+					//text = "丢失";
+					icoClass="news_iocs";
+				}else if(l_getorlost==1){
+					//text = "捡到";
+					icoClass="news_iocs02";
+				}
+				
+			
+				var hypocorism = $.trim(result.data[i].hypocorism);
+				
+				
+				var province   	= $.trim(result.data[i].province);
+				var city   		= $.trim(result.data[i].city);
+				var area   		= $.trim(result.data[i].area);
+				var areasub   	= $.trim(result.data[i].areasub);
+				var areavillage = $.trim(result.data[i].areavillage);
+				var areacorner  = $.trim(result.data[i].areacorner);
+				var picpath 	= $.trim(result.data[i].picpath);
+				var readcount 	= $.trim(result.data[i].readcount);
+				var money 	= $.trim(result.data[i].money);
+				var picMsg = "" ;
+				var moneyMsg 	=  "" ;
+				var picCount 	=  "" ;
+				if(picpath!=''){
+					//alert(picCount)
+					picCount = picpath.split("?").length;
+					picMsg = "["+picCount+"图]" ;
+				}
+				var readCountMsg = "["+readcount+"阅]" ;
+				if(money!=''&&money!=null&&money!=0){
+					moneyMsg = "["+money+"赏]" ;
+				}
+				
+				var topMsg = "" ;
+				if(i<topCount){
+					topMsg = "[置顶]" ; 
+				}
+				var k_length = 10;
+				if(picpath==''){
+					k_length = k_length+3;
+				}
+				if(moneyMsg==''){
+					k_length = k_length+3;
+				}
+				if(topMsg==''){
+					k_length = k_length+3;
+				}
+				var allname = name;
+				if(name!=null&&name.length>k_length){
+					name = name.substring(0,k_length)+"";
+				}
+				
+		//		var place1 = province;
+				var place1 = city;
+				var place2 = areasub;
+				
+				if(place1==""){
+					place1 = province ;
+				}
+				 
+				if(areasub==""){
+					place2 = areavillage;
+				}
+				
+				var titleShowPlace = place1+"-"+place2;
+				
+				if(place2.length>4){
+					place2 = place2.substring(0,4)+"" ;
+				}
+				
+				//place1 = "<a href=''>"+place1+"</a>";
+				var showPlace =  ""+place1+""+"-"+place2;
+				if(place1==place2){
+					showPlace=place1;   
+				}
+				var shortShowPlace = showPlace;
+				if(showPlace.length>14){
+					shortShowPlace = showPlace.substring(0,14) ;
+				}
+				
+				var getorlostdate = result.data[i].getorlostdate;
+				var updatedate = result.data[i].updatedate.substring(0,10);
+				var date = result.data[i].date.substring(0,10);
+				var goodsdescribe = removeHTML($.trim(result.data[i].goodsdescribe.substring(0,50).replace(/\s+/g, "")));
+				
+				var city_id=result.data[i].city_id;
+				var city_placeqp=result.data[i].city_placeqp;
+				var city_name= result.data[i].city_name;
+				var province_name= result.data[i].province_name;
+				
+				 
+				var li  ="" ;
+				li += "<li style='display:none' class='getorlost-"+getorlost+"-css'  id='getorlost-"+getorlost+"-tr'><span class='items'><span class='"+icoClass+"'></span>";
+				li += "<a target='_blank' name='"+goodsid+"' href='/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail' onmouseover='showdetails(this,1,\""+hypocorism+"\",\""+allname+"\",\""+date+"\",\""+goodsdescribe+"\")'   onmouseout='hidedetails()'>"+name+"</a>&nbsp;<span title='指数越高, 置顶机会越大'><font class='ntu'>"+topMsg+"</font></span><font style='color:#888;font-size:11px'>"+picMsg+""+moneyMsg+""+readCountMsg+"</font></span>";
+				//li += "<span class='lose_address' title='"+titleShowPlace+"'>"+shortShowPlace+"</span>";
+				li += "<span class='lose_address' title='"+titleShowPlace+"'><a href='#'  onclick='doChangeCity(\""+city_id+"\", \""+city_placeqp+"\", \""+city_name+"\", \""+province_name+"\")'>"+place1+"</a> - "+place2+"</span>";
+				li += "<span>"+updatedate+"</span>";
+				li += "</li>";
+				
+				//$(li).appendTo($("#"+listdiv+" #ul-"+getorlost)).delay(100).show('slow');
+				$(li).appendTo($("#"+listdiv+" #ul-"+getorlost)).show();
+			}
+			 
+			//报告物品总数
+			//var countDiv = $("<li style='text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;' class='f16 fb'><span>已报告"+text+"物品总数：  </span><span id='getorlostsumCount-"+getorlost+"'></span>件</li>");
+			var countDiv = $("<li style='text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;' class='f16 fb'><span>报告总数：  </span><span id='getorlostsumCount-"+getorlost+"'></span></li>");
+			countDiv.appendTo($("#"+listdiv+" #ul-"+getorlost));
+			$(".lost_01li").addClass("lost_01li");
+			
+			//物品总数
+			var sumCount = 0;
+			$.ajax({
+				 url	:"/goods/queryGoodsCount.json"
+				,data	:"getorlost="+getorlost +"&goodstype="+goodstype
+				,async	:true
+				,success:function(result){
+					sumCount = result.count; 
+					$("#"+listdiv+" #getorlostsumCount-"+getorlost+"").html(formatCurrency(sumCount));/*  */
+				}
+			});
+		}
+		function doChangeCityMoney(city_id, city_placeqp, city_name, province_name) {
+			var data = {
+				"city_id" : city_id,
+				"city_placeqp" : city_placeqp,
+				"city_name" : encodeURI(city_name),
+				"province_name" : encodeURI(province_name)
+			};
+			$.ajax({
+				url : "/common/changeCity.json",
+				data : data,
+				success : function(result) {
+					$("#goCitySpan").html(city_name);
+					$("#changeCitySpan").hide();
+					//alert(1)
+					//$("#goCitySpan").click();
+					///goods/goods-list.jspx
+					//$("#tempHrefId").attr("href","http://localhost/goods/goods-list.jspx?orderby=money");
+					//var mo2g = '<span id="mo2g">磨延城<span>';
+				    //给A标签中的文字添加一个能被jQuery捕获的元素
+				    //$('#tempHrefId').append(mo2g);
+				    //模拟点击A标签中的文字
+				    //$('#mo2g').click();
+					//$("#tempHrefId").trigger("click");//click();
+					window.location.href="/goods/goods-list.jspx?orderby=money";
+				}
+			});
+		}
+		//悬赏区列表
+		function showMoney(divId){
+			//悬赏区   ajax  置顶
+			 var data = {limit:12,order:"money",istopmoney:1};//"limit=12" ;
+			 $.ajax({
+				url:"/goods/queryGoodsListNoCity.json",
+				data:data,
+				success:function(result){
+					//var length = result.data.length;
+					//alert(obj2str(result.data[0]))
+					var ul = "<ul id='money-ul'></ul>";
+					$(ul).appendTo($("#"+divId));
+					var count_ul = "<ul  style='margin:0; padding:0; width:100%'  id='money-count-ul'></ul>";
+					$(count_ul).appendTo($("#"+divId));
+					var index = 0;
+					for(var i=0;i<4;i++){
+						//var ul="<ul id='gnq-ul-"+i+"'></ul>";
+						
+						for(var j=0;j<3;j++){
+							var li="";
+							if( result.data[index] == undefined){
+								continue;
+							}
+							var goodsid = result.data[index].id;
+							var money = result.data[index].money;
+							var hypocorism = $.trim(result.data[index].hypocorism);
+							var allhypocorism = hypocorism;
+							if(hypocorism!=null&&hypocorism.length>5){
+								hypocorism = hypocorism.substring(0,5)+"*";
+							}
+							var goodsname = result.data[index].name;
+							var allname = goodsname;
+							if(goodsname!=null&&goodsname.length>10){
+								goodsname = goodsname.substring(0,10)+"*";
+							}
+							
+							var city_id=result.data[index].city_id;
+							var city_placeqp=result.data[index].city_placeqp;
+							var city_name= result.data[index].city_name;
+							var province_name= result.data[index].province_name;
+							
+							var picpath 	= $.trim(result.data[index].picpath);
+							var picMsg = "" ;
+							var picCount 	=  "" ;
+							if(picpath!=''){
+								picCount = picpath.split("?").length;
+								picMsg = "["+picCount+"图]" ;
+							}
+							li += "<li><span><span class='icon_xsq' style='display:inline-block'></span></span>&nbsp;<span title='' style='color:#cc0000'><a href='#'  onclick='doChangeCityMoney(\""+city_id+"\", \""+city_placeqp+"\", \""+city_name+"\", \""+province_name+"\")'>"+city_name+"</a>&nbsp;￥"+money+"</span>&nbsp;<span title='"+allhypocorism+"'>["+hypocorism+"]</span>&nbsp;<a title='"+allname+"' style='cursor:pointer' href='/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail'  target='_blank'>"+goodsname+"</a>&nbsp;<span class='ntu'>"+picMsg+"</span></li>";
+							//li += "<li><span><span class='icon_xsq' style='display:inline-block'></span></span>&nbsp;<span title='' style='color:#cc0000'>悬赏&nbsp;￥"+money+"</span>&nbsp;<span title='"+allhypocorism+"'>["+hypocorism+"]</span>&nbsp;<a title='"+allname+"' style='cursor:pointer' onclick='javascript:window.open(\"/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail\")'>"+goodsname+"</a>&nbsp;<span class='ntu'>"+picMsg+"</span></li>";
+							$(li).appendTo($("#money-ul"));
+							index++;
+						}
+					}
+					
+					
+					
+					//报告物品总数
+					//var countDiv = $("<li style='text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;' class='f16 fb'><span>已报告"+text+"物品总数：  </span><span id='getorlostsumCount-"+getorlost+"'></span></li>");
+					var countDiv = $("<li style='text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;' class='f16 fb'><span>悬赏总金额：  </span><span id='moneysumCount' style='color:#cc0000;margin-right:100px'></span><span id='cityname1'></span><span id='moneysumCount1'  style='color:#cc0000;margin-right:50px'></span>&nbsp;&nbsp;<span id='cityname2'></span><span id='moneysumCount2'  style='color:#cc0000;margin-right:50px'></span>&nbsp;&nbsp;<span id='cityname3'></span><span id='moneysumCount3'  style='color:#cc0000'></span></li>");
+					countDiv.appendTo($("#"+divId+" #money-count-ul"));
+					$(".lost_01li").addClass("lost_01li");
+					
+					
+					//--money_all-------------------------------------------------------
+					var sumCount = $("#money_all_count").val(); 
+					sumCount = formatCurrency(sumCount);
+					$("#"+divId+" #moneysumCount").html(" ￥"+sumCount);  
+					//轮播图显示总赏金
+					$(".db_bgset_02 .xs_price04").html(sumCount);
+					//----top3------
+					var money_top_city1=$("#money_top_city1").val(); 
+					var money_top_city2=$("#money_top_city2").val(); 
+					var money_top_city3=$("#money_top_city3").val(); 
+					
+					var money_top_city_money1=$("#money_top_city_money1").val(); 
+					var money_top_city_money2=$("#money_top_city_money2").val(); 
+					var money_top_city_money3=$("#money_top_city_money3").val(); 
+					var cityname1 = money_top_city1; 
+					//alert(cityname1)
+					var moneysumCount1 = money_top_city_money1; 
+					moneysumCount1 = formatCurrency(moneysumCount1);
+					var cityname2 = money_top_city2; 
+					var moneysumCount2 = money_top_city_money2; 
+					moneysumCount2 = formatCurrency(moneysumCount2);
+					var cityname3 = money_top_city3; 
+					var moneysumCount3 = money_top_city_money3; 
+					moneysumCount3 = formatCurrency(moneysumCount3);
+					$("#"+divId+" #cityname1").html(cityname1+"：");  
+					$("#"+divId+" #moneysumCount1").html(" ￥"+moneysumCount1);  
+					$("#"+divId+" #cityname2").html(cityname2+"：");  
+					$("#"+divId+" #moneysumCount2").html(" ￥"+moneysumCount2);  
+					$("#"+divId+" #cityname3").html(cityname3+"：");  
+					$("#"+divId+" #moneysumCount3").html(" ￥"+moneysumCount3);  
+					
+					
+					//轮播图城市名 和 总赏金显示
+					$(".db_bgset_02 .xs_price01").html(cityname1+":￥"+moneysumCount1);
+					$(".db_bgset_02 .xs_price02").html(cityname2+":￥"+moneysumCount2);
+					$(".db_bgset_02 .xs_price03").html(cityname3+":￥"+moneysumCount3);
+					
+					//----------------------------------------------------
+					//物品总数
+					/*$.ajax({
+						 url	:"/goods/queryGoodsMoney.json"
+						,async	:true
+						,success:function(result){
+							var sumCount = result.count; 
+							sumCount = formatCurrency(sumCount);
+		 					$("#"+divId+" #moneysumCount").html(" ￥"+sumCount);  
+		 					//轮播图显示总赏金
+		 					$(".db_bgset_02 .xs_price04").html(sumCount);
+						}
+					});
+					//物品总数
+					$.ajax({
+						 url	:"/goods/queryGoodsCityMoney.json"
+						,async	:true
+						,success:function(result){
+							//var len = result.data.length ;
+							var cityname1 = result.data[0].city; 
+							//alert(cityname1)
+							var moneysumCount1 = result.data[0].money; 
+							moneysumCount1 = formatCurrency(moneysumCount1);
+							var cityname2 = result.data[1].city; 
+							var moneysumCount2 = result.data[1].money; 
+							moneysumCount2 = formatCurrency(moneysumCount2);
+							var cityname3 = result.data[2].city; 
+							var moneysumCount3 = result.data[2].money; 
+							moneysumCount3 = formatCurrency(moneysumCount3);
+		 					$("#"+divId+" #cityname1").html(cityname1+"：");  
+		 					$("#"+divId+" #moneysumCount1").html(" ￥"+moneysumCount1);  
+		 					$("#"+divId+" #cityname2").html(cityname2+"：");  
+		 					$("#"+divId+" #moneysumCount2").html(" ￥"+moneysumCount2);  
+		 					$("#"+divId+" #cityname3").html(cityname3+"：");  
+		 					$("#"+divId+" #moneysumCount3").html(" ￥"+moneysumCount3);  
+		 					
+		 					
+		 					//轮播图城市名 和 总赏金显示
+		 					$(".db_bgset_02 .xs_price01").html(cityname1+":￥"+moneysumCount1);
+		 					$(".db_bgset_02 .xs_price02").html(cityname2+":￥"+moneysumCount2);
+		 					$(".db_bgset_02 .xs_price03").html(cityname3+":￥"+moneysumCount3);
+						}
+					});*/
+					
+				}
+			}); 
+			 //end ajax
+			//更新悬赏区 超过 时间期限  不置顶
+			/*  $.ajax({
+				url:"/goods/updateGoodsIsTopMoney.json",
+				success:function(result){
+					if(result.success=="true"){
+						//悬赏区   ajax  置顶
+						 var data = {limit:12,order:"money",istopmoney:1};//"limit=12" ;
+						 $.ajax({
+							url:"/goods/queryGoodsList.json",
+							data:data,
+							success:function(result){
+								var length = result.data.length;
+								//alert(obj2str(result.data[0]))
+								var ul = "<ul id='money-ul'></ul>";
+								$(ul).appendTo($("#"+divId));
+								var index = 0;
+								for(var i=0;i<4;i++){
+									//var ul="<ul id='gnq-ul-"+i+"'></ul>";
+									
+									for(var j=0;j<3;j++){
+										var li="";
+										if( result.data[index] == undefined){
+											continue;
+										}
+										var goodsid = result.data[index].id;
+										var money = result.data[index].money;
+										var hypocorism = result.data[index].hypocorism;
+										var allhypocorism = hypocorism;
+										if(hypocorism!=null&&hypocorism.length>5){
+											hypocorism = hypocorism.substring(0,5)+"*";
+										}
+										var goodsname = result.data[index].name;
+										var allname = goodsname;
+										if(goodsname!=null&&goodsname.length>10){
+											goodsname = goodsname.substring(0,10)+"*";
+										}
+										
+										var picpath 	= $.trim(result.data[index].picpath);
+										var picMsg = "" ;
+										var picCount 	=  "" ;
+										if(picpath!=''){
+											picCount = picpath.split("?").length;
+											picMsg = "["+picCount+"图]" ;
+										}
+										li += "<li><span><span class='icon_xsq' style='display:inline-block'></span></span>&nbsp;<span title='' style='color:#cc0000'>悬赏&nbsp;￥"+money+"</span>&nbsp;<span title='"+allhypocorism+"'>["+hypocorism+"]</span>&nbsp;<a title='"+allname+"' style='cursor:pointer' onclick='javascript:window.open(\"/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail\")'>"+goodsname+"</a>&nbsp;<span class='ntu'>"+picMsg+"</span></li>";
+										$(li).appendTo($("#money-ul"));
+										index++;
+									}
+								}
+								
+							}
+						}); 
+						 //end ajax
+					}
+				}
+			});  */
+			
+		}
+
+		function showWall(divId){
+			//感恩墙 ajax
+			 var data = "limit=12" ;
+			 $.ajax({
+				url:"/traderecord/queryTradeRecordNoCity.json",
+				data:data,
+				success:function(result){
+					var length = result.data.length;
+					//alert(obj2str(result.data[0]))
+					var ul = "<ul id='gnq-ul'></ul>";
+					$(ul).appendTo($("#"+divId));
+					var index = 0;
+					for(var i=0;i<4;i++){
+						//var ul="<ul id='gnq-ul-"+i+"'></ul>";
+						
+						for(var j=0;j<3;j++){
+							var li="";
+							if( result.data[index] == undefined){
+								continue;
+							}
+							var goodsid = result.data[index].id;
+							var losthypocorism = result.data[index].losthypocorism;
+							if(losthypocorism.length>5){
+								losthypocorism = losthypocorism.substring(0,5)+"*";
+							}
+							//losthypocorism = losthypocorism.substring(0,5);
+							var findhypocorism= result.data[index].findhypocorism;
+							if(findhypocorism.length>5){
+								findhypocorism = findhypocorism.substring(0,5)+"*";
+							}
+							var goodsname = result.data[index].goodsname;	
+							var shotgoodsname = goodsname;
+							if(goodsname.length>6){
+								shotgoodsname = goodsname.substring(0,6)+"*";
+							}
+							
+							var traderecorddate = String(result.data[index].traderecorddate);
+							traderecorddate = traderecorddate.substring(0,10);
+							//onclick='javascript:window.open(\"/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail\")'
+							li += "<li><span><span class='icon_gnq' style='display:inline-block'></span>"+traderecorddate+"</span>&nbsp;<span title='"+result.data[index].findhypocorism+"'>["+findhypocorism+"]</span>帮<span title='"+result.data[index].losthypocorism+"'>["+losthypocorism+"]</span>捡到了&nbsp;<a title='"+goodsname+"' style='cursor:pointer' href='/goods/goods_details.jspx?goodsid="+goodsid+"&nav=goodsDetail'  >"+shotgoodsname+"</a></li>";
+							$(li).appendTo($("#gnq-ul"));
+							
+							index++;
+						}
+					}
+					
+				}
+			}); 
+		}
+
+		/** 检索 */
+		$.widget("custom.custom_complete", $.ui.autocomplete, {
+			_renderMenu : function(ul, items) {
+				var that = this, currentCategory = "";
+				$.each(items, function(index, item) {
+					//alert(item.category) 
+					if (item.category != currentCategory) {
+						//ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+						//currentCategory = item.category;
+						ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+						currentCategory = item.category;
+					}
+					that._renderItemData(ul, item);
+				});
+			}
+		});
+
+
+		//autocomplete demo
+		//http://api.jqueryui.com/autocomplete/#entry-examples
+		$(function() {  
+			var record = null;
+			var cache = {},  lastXhr;  
+			$('#entryinput').custom_complete({
+				source: function( request, response ) {
+					var getorlost_name = $.trim($("#getorlost_name").html());//选择的全部、丢失、捡到
+					var getorlost_hidden = $.trim($("#getorlost_hidden").val());//临时存储 选择的丢失还是捡到
+					var getorlost = "";
+					if(getorlost_name=="丢失"){
+						getorlost = "0";
+					}
+					else if(getorlost_name=="捡到"){ 
+						getorlost = "1";
+					}else{
+						getorlost = "";
+					}
+					//alert(getorlost_hidden)
+					var term = request.term;  //文本框的值
+				    if(getorlost_hidden==getorlost){
+			            if ( term in cache ) {  
+			                response( cache[ term ] );  
+			                return;  
+			            }   
+					} else{
+						$("#getorlost_hidden").val(getorlost);
+					}
+					
+					
+					//alert (getorlost)
+		          $.ajax({
+		          	url : "/goods/queryGoodsByKeyWord.json",
+		              dataType: "json",
+		              data : {
+		              	key 	 : term 
+		              	,getorlost : getorlost 
+		              	//,limit    : 10   //key:10
+			            },
+		              success: function( result ) {
+		              	 var array = new Array;
+			                 $.each(result.data,function(i,obj){
+			                	 var getorlost = obj.getorlost;
+			    		     	 var getorlostWord = "(丢)";
+			    		     	 if(getorlost=='1'){
+			    		     		getorlostWord = "(捡)";
+			    		     	 }
+			                	 //var record = {label:obj.name+ getorlostWord +" ["+obj.areasub+"-"+obj.areavillage+"-"+obj.getorlostdate+"]",value:obj.name,category: obj.areasub}; 
+			                	 var record = {label:obj.name+ getorlostWord +" ["+obj.areavillage+"-"+obj.getorlostdate+"]",value : obj.name, category : obj.areasub}; 
+			                	
+			                	 array.push(record);
+			                 });
+			                 cache[ term ] = array;
+			                 
+		                   response( 
+		                       array
+		                   );
+		              }
+		          });
+		      },
+		      minLength: 2,
+		     /*  
+		     search: function() {
+		          // custom minLength
+		          var term =  this.value ;
+		          if ( term.length < 2 ) {
+		            return false;
+		          }
+		      },  
+		      */
+			    select: function( event, ui ) {
+			    	setTimeout(function(){
+				    	var keyword= ui.item.value ;
+				    	showSearchGoodsListByName(keyword);
+			    	},500);
+			    }
+		       ,
+		      open: function(event, ui) {
+		      	//$( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+		      	//alert(ui.item.value+"="+ ui.item.id+"="+$( this ).value);
+		      	//alert(1); 
+		      }
+		       /*, 
+		      close: function(event, ui) {
+		      	$( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+		      	alert("close")
+		      } */
+				,
+				autoFocus: false //是否自动默认选择第一个 
+			});
+			
+			//$( "#entryinput" ).autocomplete({ position: { my : "right top", at: "right bottom" } });
+		   $("#entryinput").bind("keypress",function(e){
+		  	 //alert(e.keyCode)
+		  	 if(e.keyCode==13){
+		  		 var keyword= $.trim($("#entryinput").val()) ;
+		  		 showSearchGoodsListByName(keyword);
+		  		 //点击回车后自动隐藏 提示信息
+		  		 $(".ui-autocomplete").hide();
+		  	 }else{
+			    	 //$("#s_msg").html("");
+		  	 }
+		   });
+		  // alert(!("placeholder" in document.createElement("input")))
+			/*  if(!("placeholder" in document.createElement("input"))){
+				    $.getScript("../js/jquery/jquery.placeholder.js",function(){
+				        $("#entryinput").placeholder();//让id=keyword的元素支持placeholder，换成你自己的选择器
+				        $("#entryinput").focus();
+				    });
+			 } */
+		  $("#entryinput").focus();
+			 if(/chrome/.test(navigator.userAgent.toLowerCase())){
+				 $("#entryinput").val("");
+				// alert($("#entryinput").val())
+			 }
+			 
+			//alert(/chrome/.test(navigator.userAgent.toLowerCase()))
+		 
+		}); 
+		function showSearchGoodsListByName(keyword){ 
+			keyword = $.trim(keyword);
+			if(keyword==""||keyword=="物品名称/证件号码/地点等"){
+				jAlert("请输入检索关键字","提示",function(){
+					$("#entryinput").focus();
+				});
+			}else{
+				var city = $.trim($("#city").val());
+				var getorlost_name = $.trim($("#getorlost_name").html());
+				var getorlost = "";
+				if(getorlost_name=="丢失"){
+					getorlost = "0";
+				}
+				else if(getorlost_name=="捡到"){ 
+					getorlost = "1";
+				}
+				var newUrl = "/goods/goods-list.jspx?city="+city+"&keyword="+encodeURI(keyword)+"&getorlost="+getorlost ;
+				//alert(newUrl)
+				window.open(newUrl);
+			}
+			
+		}
+		/** 解析表情 */
+		$(document).ready(function(e) {
+			$(".sel_value").click(function(){
+				$(".sel_list_body").slideDown(100);
+			});
+			$(".in_sel").hover(function(){},function(){
+				$(".sel_list_body").slideUp(100);
+			}); 
+			
+			
+			$(".sel_list li").click(function(){
+				$(".sel_list_body").slideUp(100);
+				$(".sel_value").html($(this).html());
+			});
+			
+			if(/chrome/.test(navigator.userAgent.toLowerCase())){
+				 $(".search_con_in #entryinput").val("");
+				// alert($("#entryinput").val())
+			}  
+			
+			 
+			
+		});
+
+		//测试本地解析 analytic("emotionContent");
+		function analytic(emotionContent)  {  
+			var app_id = '992343784';
+			$.ajax( {
+				dataType : 'jsonp',
+				url : 'https://api.weibo.com/2/emotions.json?source=' + app_id,
+				success : function(response) {
+					var data = response.data;
+					for ( var i in data) {
+						if (data[i].category == '') {
+							data[i].category = '默认';
+						}
+						if (emotions[data[i].category] == undefined) {
+							emotions[data[i].category] = new Array();
+							categorys.push(data[i].category);
+						}
+						emotions[data[i].category].push( {
+							name : data[i].phrase,
+							icon : data[i].icon
+						});
+						uSinaEmotionsHt.put(data[i].phrase, data[i].icon);
+					}
+					
+					
+					var emotionContent_span = $("."+emotionContent+"");
+					$.each(emotionContent_span,function(j){
+						var inputText = $(this).html() ;
+						var sArr = inputText.match(/\[.*?\]/g);
+						if(sArr!=null){
+							$(this).html(AnalyticEmotion(inputText)); 
+							$(this).children("img").css("float","none");
+						}
+					});//end each
+			         
+
+				}
+			//end  success
+			});
+			//end ajax
+			
+			
+		}// end fun
+		 
+
+
+
+		/** 弹出框 显示详细信息 */
+		function showdetails(thisObj,orderid,hypocorism,name,date,goodsdescribe) { 
+			var d = $(thisObj);
+			var pos = d.offset();
+			var t = pos.top  - 150; // 弹出框的上边位置
+			var l = pos.left + d.width() - 80; // 弹出框的左边位置
+			$("#details").empty();
+			var contentDiv = "";
+			contentDiv += "<div id='box1' style='display:!none;' class='' >";
+			contentDiv += "<div class='pop_box color6'  >";
+			contentDiv += "<b class='b1'></b><b class='b2'></b><b class='b3'></b><b class='b4'></b> ";
+			contentDiv += "<div class='pop_box_info '  style=''>";
+			contentDiv += "<div class='pop_box_info_tit'  >";
+			contentDiv += "<div class='pop_box_info_name' id='box1title'>"+name+"</div>";
+			contentDiv += "<div class='pop_box_info_date' id='box1date'>创建日期:"+date+"</div>"; 
+			contentDiv += "</div>"; 
+			//contentDiv += "<p class='pop_box_info_txt' style='margin-top:20px'><div id='box1content'><font style='color:#cc0000;font-weight:'>["+hypocorism+"]</font>:"+goodsdescribe+"</div></p>";
+			contentDiv += "<p class='pop_box_info_txt' style=''><div id='box1content'  class='emotionContent'>"+goodsdescribe+"</div></p>";
+			contentDiv += "<p><div class='pop_box_info_line' style='margin-top:10px;margin-bottom:15px'></div></p>";
+			contentDiv += "</div>";
+			contentDiv += "<b class='b5'></b><b class='b6'></b><b class='b7'></b><b class='b8'></b> ";  
+			contentDiv += "<em ></em><span></span>";
+			contentDiv += "</div>";
+			contentDiv += "</div>";  
+			//$("#box1title").html(goodsdescribe); style='border:solid 1px red'
+			//$("#box1").appendTo($("#details"));
+			//alert($("#details").html())
+			$("#details").css({
+				"top" : t,
+				"left" : l,
+				"z-index" : "500",
+				"height":"100px"
+			}).show();
+			$(contentDiv).appendTo($("#details"));
+			
+			var inputText = goodsdescribe ;
+			var sArr = inputText.match(/\[.*?\]/g);
+			if(sArr!=null){
+				analytic("emotionContent");
+			}
+			//$("#details").html("");
+			//$("#details").html($("#box1").html());
+		}
+	</script>
+</head>
+<body>
+	<link rel="stylesheet" type="text/css" href="/static/js/nml/main/nml_main.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/common/nml_head_top.css">
+	<script type="text/javascript" src="/static/js/nml/common/nml_head_top.js"></script>
+	<div class="topest" id="head-top1" style="display:block; width: 100%">
+		<div class="toph">
+			<span class="fr" id="head-top-right-span" style="margin-right: 10px;">
+				<a href="/lostandfound/register.html"><b class="white">注册</b></a>
+				<span style="margin-left: 10px; color: gray;">|</span>
+				<a onclick="login();" href="#"><b class="white">登录</b></a>
+ 				<span style="margin-left: 10px; color: gray;">|</span> 
+				<a href="/lostandfound/quickRegGoods.html" target="_blank"><b class="white">快速发布</b></a> 
+			</span>			
+		</div>
+	</div>
+	<br class="clear">
+	<div class="header_body">
+    	<div class="header" style="height: 120px; position:relative;">	
+    		<div class="logo">
+				<a href="/lostandfound" class="logoA">
+					<img src="/static/images/logo.png" alt="寻物启事|失物招领" class="BSHARE_DONTSHARE">
+					<div style="position:relative;">
+						<div style="position:absolute; left:150px; top:10px; font-weight:bold; color:#88A6E6;">BETA</div>
+					</div>
+				</a>
+        	</div>
+        	<div class="in_search_body" style="margin-left: 80px;margin-top: 30px;">
+				<div class="search_con_in" style="width:450px; border: 1px solid #4e87e1;">
+		    		<div class="in_sel" style=" border-right: 1px solid #4e87e1;">
+		        		<span class="sel_value" id="getorlost_name">全部</span>
+		            	<div class="sel_list_body" style="display: none;">
+		                	<ul class="sel_list">
+		                    	<li>全部</li>
+		                    	<li>捡到</li>
+		                    	<li>丢失</li>
+		                	</ul>
+		            	</div>
+		            </div>
+		        	<div class="fl">
+			        	<input type="text" class="search_input_or ui-autocomplete-input" id="entryinput" style="color: rgb(223, 223, 223); border: 0px none; margin-top: 3px; line-height: 30px; height: 30px; width: 370px;" placeholder="物品名称/证件号码/地点等" autocomplete="off" x-webkit-speech="" lang="zh-CN" x-webkit-grammar="builtin:search" onblur="if(this.value==''||this.value=='物品名称/证件号码/地点等'){this.value='物品名称/证件号码/地点等';this.style.color='#DFDFDF';}" onfocus="if(this.value=='物品名称/证件号码/地点等'){this.value=''};this.style.color='black';" value="物品名称/证件号码/地点等">
+			        	<span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+		        	</div>
+		        </div>
+		    	<input type="button" class="in_search_btn" value="搜索" onclick="showSearchGoodsListByName($('#entryinput').val())" style="font-weight: bold;">
+				<input type="button" onclick="window.open('/lostandfound/quickRegGoods.html')" style=" border:0; font-size:14px; color:#fff; background:#fc8004; height:37px; width:100px; line-height:37px; margin-left: 60px;font-weight: bold;" value="快速发布">
+			</div>
+			<div style="height: 30px; line-height:  10px; margin: 10px; padding-left: 15px;" class="clear">
+				<img src="/static/images/logo_word.png" style="float: left;">
+				<span style="margin-left: 37px;" class="hot_label">热门搜索：
+					<a onclick="showSearchGoodsListByName('钱包')" class="pointer">钱包</a>
+					<a href="#" onclick="showSearchGoodsListByName('身份证')" class="pointer">身份证</a>
+					<a href="#" onclick="showSearchGoodsListByName('银行卡')" class="pointer">银行卡</a>
+					<a href="#" onclick="showSearchGoodsListByName('手机')" class="pointer">手机</a>
+					<a href="#" onclick="showSearchGoodsListByName('笔记本')" class="pointer">笔记本</a>
+					<a href="#" onclick="showSearchGoodsListByName('钥匙')" class="pointer">钥匙</a>
+					<a href="#" onclick="showSearchGoodsListByName('猫猫')" class="pointer">猫猫</a>
+					<a href="#" onclick="showSearchGoodsListByName('狗狗')" class="pointer">狗狗</a>
+				</span>
+			</div>
+		</div>
+    </div>	
+	<div class="DB_tab25">
+		<div class="lb_link">
+	    	<div style="position:relative;">
+	    	<!-- 寻物启事 -->
+	    	<a href="/goods/quickReg.jspx?getorlost=0&amp;goodstype=1" class="lb_link01" target="_blank"></a>
+	    	<!-- 失物招领 -->
+	        <a href="/goods/quickReg.jspx?getorlost=1&amp;goodstype=1" class="lb_link02" target="_blank"></a>
+	    	<!-- 训宠专区 -->
+	        <a href="/goods/quickReg.jspx?getorlost=0&amp;goodstype=2" class="lb_link03" target="_blank"></a>
+	    	<!-- 训人专区 -->
+	        <a href="/goods/quickReg.jspx?getorlost=0&amp;goodstype=3" class="lb_link04" target="_blank"></a>
+	        </div>
+	    </div>
+		<ul class="DB_bgSet">
+	    	<li style="display: none; background: url(/static/images/main/lb_02.jpg) 50% 50% no-repeat;"></li>
+			<li class="db_bgset_02" style="font-family: 微软雅黑; display: none; background-image: url(/static/images/main/lb_03.jpg); background-color: rgb(160, 60, 26); background-position: 50% 50%; background-repeat: no-repeat;">
+				<div style="position: relative; width: 980px; height: 400px; margin: 0 auto;">
+				<a class="fr f12 mr16" href="/goods/goods-list.jspx?orderby=money" target="_blank">
+					<span class="xs_price01">北京:￥313,367</span>
+					<span class="xs_price02">上海:￥206,906</span>
+					<span class="xs_price03">深圳:￥93,876</span>
+					<span class="xs_price04">1,212,230</span>
+				</a>
+				</div>
+			</li>
+		    <li class="db_bgset_03" style="display: list-item; background: url(/static/images/main/lb_01.jpg) 50% 50% no-repeat;">
+	      		<div style="position:relative; width:980px; height:400px; margin:0 auto;">
+	        	<a href="/goods/goods-list.jspx?p_area=daxue" class="link_map01" title="大学" target="_blank"></a> 
+	            <a href="/goods/goods-list.jspx?p_area=ggpt&amp;p_area_sub=gj" class="link_map02" title="公交" target="_blank"></a>
+	            <a href="/goods/goods-list.jspx?p_area=ditie" class="link_map03" title="地铁" target="_blank"></a>
+	            <a href="/goods/goods-list.jspx?p_area=ggpt&amp;p_area_sub=cz" class="link_map04" title="出租" target="_blank"></a>
+	            <a href="/goods/goods-list.jspx?p_area=ggpt&amp;p_area_sub=jc" class="link_map05" title="机场" target="_blank"></a>
+	            <a href="/goods/goods-list.jspx?p_area=ggpt&amp;p_area_sub=hcz" class="link_map06" title="火车站" target="_blank"></a>
+	            <a href="/goods/goods-list.jspx?p_area=ggpt&amp;p_area_sub=ctkyz" class="link_map07" title="长途客运站" target="_blank"></a>
+	            <a href="#" class="link_map08" title="联系电话" target="_blank"></a>
+	            </div>
+	        </li>
+	        <li class="db_bgset_04" style="display: none;">
+				<div class="uced02" style="position:relative; width:980px; height:400px; margin: 0 auto;  background: url(/static/images/main/help-bannerpic.png) no-repeat;">
+					<a href="/qa/reg_QA.html" class="helpc-link01" target="_blank"></a>
+					<a href="/qa/login01.html" class="helpc-link02" target="_blank"></a>
+					<a href="/qa/sub01.html" class="helpc-link03" target="_blank"></a>
+					<a href="/qa/pub01.html" class="helpc-link04" target="_blank"></a>
+					<a href="/qa/mob.html" class="helpc-link05" target="_blank"></a>
+					<a href="/qa/statute01.html" class="helpc-link06" target="_blank"></a>
+
+				</div>
+			</li>
+		</ul>	
+		<ul class="DB_imgSet" style="position: relative;">
+			<li onclick="" style="position: absolute; display: none;"></li>
+			<li onclick="" style="position: absolute; display: none;"></li>
+			<li onclick="" style="position: absolute; display: list-item;"></li>
+			<li onclick="" style="position: absolute; display: none;"></li>
+		</ul>	
+		<div class="DB_menuWrap">
+			<ul class="DB_menuSet">
+				<li class=""><img src="/static/images/main/btn_off.png" alt="寻物启事|失物招领"></li>
+				<li class=""><img src="/static/images/main/btn_off.png" alt="寻物启事|失物招领"> </li>
+				<li class="select"><img src="/static/images/main/btn_on.png" alt="寻物启事|失物招领"></li>
+				<li class=""><img src="/static/images/main/btn_off.png" alt="寻物启事|失物招领"></li>
+			</ul>
+			<div class="DB_next" style="display: none;"><img src="/static/images/main/nextArrow.png" alt="寻物启事|失物招领"></div>
+			<div class="DB_prev" style="display: none;"><img src="/static/images/main/prevArrow.png" alt="寻物启事|失物招领"></div>
+		</div>	
+	</div>
+    <br class="clear">
+    <div id="wrap_f">
+    <!--main 最新寻物和失物展示区-->
+    	<div>
+	        <div class="lost_01 fl" style="">
+	            <ul class="lost_01ul">
+	                <li style="line-height:30px; height:30px;" class="file_tit f16 fb lh30">
+	                	<a class="fr f12" href="/goods/goods-list.jspx?getorlost=0&amp;goodstype=1" target="_blank">更多&gt;&gt;</a>
+	                	<h2 class="lf f16 fb pos_tit" style="width:300px">寻物启事</h2>
+	                </li>
+	            </ul>
+	            <div class="lost_con" id="goodslostlistdiv">
+		            <ul id="ul-0" class="clear">
+		                <li class="f14 fb ">
+		                	<span class="items pos_tit">标题</span>
+		                	<span class="lose_address">地点</span>
+		                	<span>发布时间</span>
+		                </li>
+		                <li style="" class="getorlost-0-css" id="getorlost-0-tr">
+		                	<span class="items">
+		                		<span class="news_iocs"></span>
+		                		<a target="_blank" name="3175" href="/goods/goods_details.jspx?goodsid=3175&amp;nav=goodsDetail" onmouseover="showdetails(this,1,&quot;1308395669&quot;,&quot;姓名：夏云霄 身份证地址：河南&quot;,&quot;2015-01-24&quot;,&quot;朋友在上海市,黄浦区,南京路步行街购物时不慎遗失钱包，钱包内有银行卡及身份证，（身份证姓名：夏云霄、&quot;)" onmouseout="hidedetails()">姓名：夏云霄 身份证地址：河南</a>&nbsp;
+		                		<span title="指数越高, 置顶机会越大">
+		                				<font class="ntu">[置顶]</font>
+		                		</span>
+		                		<font style="color:#888;font-size:11px">[240阅]</font>
+		                	</span>
+		                	<span class="lose_address" title="上海-黄浦">
+		                		<a href="#" onclick="doChangeCity(&quot;390&quot;, &quot;shanghai&quot;, &quot;上海&quot;, &quot;上海&quot;)">上海</a> - 黄浦
+		                	</span>
+		                	<span>2015-02-09</span>
+		                </li>
+		                <li style="" class="getorlost-0-css" id="getorlost-0-tr">
+		                	<span class="items">
+		                		<span class="news_iocs"></span>
+		                		<a target="_blank" name="2448" href="/goods/goods_details.jspx?goodsid=2448&amp;nav=goodsDetail" onmouseover="showdetails(this,1,&quot;The Monster&quot;,&quot;寻找陈宝山身份证&quot;,&quot;2014-10-25&quot;,&quot;8月1号，本人将身份证丢失，从东王庄小区到清华东路到弘彧大厦沿途，附近有林业大学，矿业大&quot;)" onmouseout="hidedetails()">寻找陈宝山身份证</a>&nbsp;
+		                		<span title="指数越高, 置顶机会越大">
+		                			<font class="ntu">[置顶]</font>
+		                		</span>
+		                		<font style="color:#888;font-size:11px">[1图][300赏][1215阅]</font>
+		                	</span>
+		                	<span class="lose_address" title="北京-海淀"><a href="#" onclick="doChangeCity(&quot;389&quot;, &quot;beijing&quot;, &quot;北京&quot;, &quot;北京&quot;)">北京</a> - 海淀</span>
+		                	<span>2014-10-26</span>
+		                </li>
+
+		                <li style="text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;" class="f16 fb">
+		                	<span>报告总数：  </span>
+		                	<span id="getorlostsumCount-0">2,811</span>
+		                </li>
+		            </ul>
+	        	</div>
+	    	</div>
+	        <div class="lost_01 fr ml18" style="">
+	            <ul class="lost_01ul">
+	                <li class="file_tit f16 fb h_lh30 " style="height: 30px;line-height: 30px"><a class="fr f12" href="/goods/goods-list.jspx?getorlost=1&amp;goodstype=1" target="_blank">更多&gt;&gt;</a><h2 class="lf f16 fb pos_tit" style="width:300px">失物招领</h2> </li>
+	            </ul>
+	            <ul class="clear" id="goodsgetlistdiv">
+	            	<ul id="ul-1" class="clear">
+		            	<li class="f14 fb ">
+		            		<span class="items pos_tit">标题</span>
+		            		<span class="lose_address">地点</span>
+		            		<span>发布时间</span>
+		            	</li>
+		            	<li style="" class="getorlost-1-css" id="getorlost-1-tr">
+		            		<span class="items">
+		            			<span class="news_iocs02"></span>
+		            			<a target="_blank" name="3427" href="/goods/goods_details.jspx?goodsid=3427&amp;nav=goodsDetail" onmouseover="showdetails(this,1,&quot;1129919347&quot;,&quot;彭洋身份证&quot;,&quot;2015-03-07&quot;,&quot;捡到彭洋身份证一张&quot;)" onmouseout="hidedetails()">彭洋身份证</a>&nbsp;
+		            			<span title="指数越高, 置顶机会越大">
+		            				<font class="ntu">[置顶]</font>
+		            			</span>
+		            			<font style="color:#888;font-size:11px">[1图][98阅]</font>
+		            		</span>
+		            		<span class="lose_address" title="成都-">
+		            			<a href="#" onclick="doChangeCity(&quot;263&quot;, &quot;chengdu&quot;, &quot;成都&quot;, &quot;四川&quot;)">成都</a> - 
+		            		</span>
+		            		<span>2015-03-07</span>
+		            	</li>
+		            	<li style="" class="getorlost-1-css" id="getorlost-1-tr">
+		            		<span class="items">
+		            			<span class="news_iocs02"></span>
+		            			<a target="_blank" name="2039" href="/goods/goods_details.jspx?goodsid=2039&amp;nav=goodsDetail" onmouseover="showdetails(this,1,&quot;黑黑黑黑月下&quot;,&quot;刘易维娜身份证&quot;,&quot;2014-09-06&quot;,&quot;捡到后发现学生门都回去了！&quot;)" onmouseout="hidedetails()">刘易维娜身份证</a>&nbsp;
+		            			<span title="指数越高, 置顶机会越大">
+		            				<font class="ntu">[置顶]</font>
+		            			</span>
+		            			<font style="color:#888;font-size:11px">[520阅]</font>
+		            		</span>
+		            		<span class="lose_address" title="石家庄-其他">
+		            			<a href="#" onclick="doChangeCity(&quot;10&quot;, &quot;shijiazhuang&quot;, &quot;石家庄&quot;, &quot;河北&quot;)">石家庄</a> - 其他
+		            		</span>
+		            		<span>2014-09-08</span>
+		            	</li>
+
+		            	<li style="text-align:center; border-top:1px solid #cfcfcf; line-height:30px; padding:0;  margin:0; width:100%;" class="f16 fb">
+		            		<span>报告总数：  </span>
+		            		<span id="getorlostsumCount-1">340</span>
+		            	</li>
+	            	</ul>
+	        	</ul>  
+	    	</div>     	
+		</div>
+	<!-- end main-->
+		<br class="clear">
+	<!--  money   悬赏区-->
+		<br class="clear">
+		<div class="xs_body">
+			<p>
+		    	<a>悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    
+
+		    	<a style="margin-right:  0px">悬赏悬赏悬赏悬赏</a> 
+		    </p> 
+		    <a href="/goods/goods-list.jspx?orderby=money" target="_blank" style="overflow: hidden; display: block; position: relative; width: 1024px; height: 96px;"><img id="xs_pic" src="/static/images/xs_pic.png" style="position: relative; width: 1024px; height: 96px; top: 0px; left: 0px;"></a>
+		    <p>
+		    	<a>悬赏悬赏悬赏悬赏</a><a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a class="xs_a_left">悬赏悬赏悬赏悬赏</a>
+		    	<a style="margin-right:  0px">悬赏悬赏悬赏悬赏</a> 
+		    </p>  
+		</div>
+	<!--  end money-->
+		<br class="clear">
+	<!-- 临时广告 -->
+		<br class="clear">
+		<div style="overflow: hidden; display: block; position: relative; width: 1024px; height: 121px;">
+	    	<img id="main_show1" src="/static/images/main/main_show1.jpg" style="position: relative; width: 1024px; height: 122px; top: -0.5px; left: 0px;">
+		</div>
+	<!--  wall  -->
+		<br class="clear">
+		<div class="gn_hidden" style="margin-top: 0px">
+    		<span class="file_tit f16 fb   h_lh30" style="width:100%"><!-- <a class="fr f12 mr16" href=""  target="_blank">更多&gt;&gt;</a> -->
+    			<h2 class="lf f16 fb mr16">
+    				<span class="ml18">感恩墙</span>
+    			</h2>
+    		</span>
+        	<div id="gnq_content_div">
+        		<ul id="gnq-ul">
+        			<li>
+        				<span><span class="icon_gnq" style="display:inline-block"></span>2014-09-02</span>&nbsp;
+        				<span title="张女士">[张女士]</span>帮
+        				<span title="pinky15030482">[pinky*]</span>捡到了&nbsp;
+        				<a title="昌平国泰不慎将钱包丢失" style="cursor:pointer" href="/goods/goods_details.jspx?goodsid=1986&amp;nav=goodsDetail">昌平国泰不慎*</a>
+        			</li>
+        			<li>
+        				<span><span class="icon_gnq" style="display:inline-block"></span>2014-02-18</span>&nbsp;
+        				<span title="小大宁">[小大宁]</span>帮
+        				<span title="王元博">[王元博]</span>捡到了&nbsp;
+        				<a title="王元博身份证" style="cursor:pointer" href="/goods/goods_details.jspx?goodsid=499&amp;nav=goodsDetail">王元博身份证</a>
+        			</li>
+        			<li>
+        				<span><span class="icon_gnq" style="display:inline-block"></span>2014-01-05</span>&nbsp;
+        				<span title="jiaomomo">[jiaom*]</span>帮
+        				<span title="好心养主">[好心养主]</span>捡到了&nbsp;
+        				<a title="白色比熊" style="cursor:pointer" href="/goods/goods_details.jspx?goodsid=587&amp;nav=goodsDetail">白色比熊</a>
+        			</li>
+        		</ul>
+        	</div>
+    	</div>
+	<!-- end wall -->
+	<!-- friendly links  -->
+		<br class="clear">
+		<div class="gn_hidden" style="margin-top: 0px">
+    		<span class="file_tit f16 fb   h_lh30" style="width:100%"><!-- <a class="fr f12 mr16" href=""  target="_blank">更多&gt;&gt;</a> -->
+    			<h2 class="lf f16 fb mr16">
+    			<span class="ml18">友情链接</span>
+    			</h2>
+    		</span>
+        	<div id="links_content_div">
+        	<table width="90%" style="margin: 20px 10px 20px 55px">
+			   	<tbody>
+			   		<tr align="center">
+			   			<td><a href="/lostandfound" class="pointer" target="_blank" style="text-decoration: underline;">寻物启事</a></td>
+			   			<td><a href="/lostandfound" class="pointer" target="_blank" style="text-decoration: underline;">失物招领</a></td>
+			   			<td><a href="http://portal.dlnu.edu.cn/index4.jsp" class="pointer" target="_blank" style="text-decoration: underline;">校内信息门户网站</a></td>
+			   			<td><a href="http://210.30.1.112:8089/Self/LoginAction.action" class="pointer" target="_blank" style="text-decoration: underline;">校园网登录中心</a></td>
+						<td><a href="http://www.dlnu.net/forum.php" class="pointer" target="_blank" style="text-decoration: underline;">大连民族大学论坛</a></td>
+						<td><a href="http://www.w3cfuns.com" class="pointer" target="_blank" style="text-decoration: underline;">W3Cfuns前端网</a></td>
+						<td><a href="https://wx.qq.com" class="pointer" target="_blank" style="text-decoration: underline;">微信网页版</a> </td>
+						<td><a href="http://v3.bootcss.com" class="pointer" target="_blank" style="text-decoration: underline;">Bootstrap中文网</a></td>
+						<td><a href="http://www.gfsoso.com/scholar/" class="pointer" target="_blank" style="text-decoration: underline;">Google学术搜索</a></td>
+						<td><a href="http://www.videojs.com/" class="pointer" target="_blank" style="text-decoration: underline;">HTML5 Video Player</a></td>
+			   		</tr>
+		   		</tbody>
+		   	</table> 
+        	</div>
+    	</div>
+	<!--footdiv 版权所有    onLineUserNum  visitNum -->
+		<div id="footer">
+   			<p></p>
+   			<div style="text-align: center;width:100%">
+	   			<table width="55%" style="margin:auto">
+		   			<tbody>
+		   				<tr align="center">
+		   					<td><a href="/lostandfound" class="pointer">首页</a></td>
+		   					<td>|</td>
+		   					<td><a onclick="javascript:showAboutUs();" class="pointer">关于我们</a></td>
+		   					<td>|</td>
+							<td><a onclick="javascript: showContactUs();" class="pointer">联系我们</a></td>
+				   			<td>|</td>
+				   			<td><a onclick="javascript:showReplyUs();" class="pointer">意见反馈</a></td>
+				   			<td>|</td>
+				   			<td><a onclick="javascript: disclaimers();" class="pointer">免责声明</a></td>
+				   			<td>|</td>
+				   			<td><a href="/qa/reg_QA.html" target="_blank" class="pointer">帮助中心</a></td>
+				   			<td>|</td> 
+				   			<td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank">关注我们</a></td>
+				   			<td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank" title="官方微博关注">	<img alt="官方微博" src="/static/images/wb-share/wb_LOGO_24x24.png"></a>
+							</td>
+		   				</tr>
+	   				</tbody>
+	   			</table> 
+   			</div>  	
+			<p></p>
+			<p style="margin-top: 10px;margin-bottom: 15px">在哪儿 Copyright &copy;  2014-2015  <a href="/lostandfound" title="快易寻 - 寻物启事与失物招领平台">Zainar.com</a>  All rights reserved.    辽ICP备 暂无备号</p> 
+ 			<p></p>
+ 		<!-- 百度统计 -->
+		<script type="text/javascript">var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F67e23cf5c6b5f2e2f490011a39b79b8f' type='text/javascript'%3E%3C/script%3E"));</script><script src=" http://hm.baidu.com/h.js?67e23cf5c6b5f2e2f490011a39b79b8f" type="text/javascript"></script> 
+		</div>
+	<!-- 回到顶部 -->
+		<script type="text/javascript" src="/static/js/nml/common/nml_bottom_button.js"></script>
+		<link rel="stylesheet" type="text/css" href="/static/js/nml/common/nml_bottom_button.css">
+		<div id="roll" style="display: block;">
+			<div title="回到顶部" id="roll_top"></div>
+		</div>
+    </div>
+
+	<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"0","bdPos":"right","bdTop":"100"},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+@charset "utf-8";
+/* CSS Document */
+
+.content{margin-top:20px;}
+.con_left img{margin:13px;float:left;}
+.con_left{float:left;}
+.con_right{float:left; width:380px; height:375px; background: url(../../images/loginbg.png) no-repeat; margin:13px;}
+.con_right_title{height:90px;}
+.con_right ul{margin:10px auto auto 30px;}
+.con_right ul li{ line-height:34px; height:34px; margin-bottom:20px;}
+.con_right ul li input{border:1px solid #999; height:30px; width:220px;}
+.con_right ol li{margin-left:85px;}
+.btn03{width:111px; height:31px; border:0; background: url(../../images/loginbtn.png) no-repeat; margin:10px auto;}
+.con_right a{color:#3366ff;}
+#footer{border-top:3px solid #3366ff ;}   

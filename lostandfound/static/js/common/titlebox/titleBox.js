@@ -1,0 +1,3 @@
+function hidedetails() {
+	$("#details").hide();
+}

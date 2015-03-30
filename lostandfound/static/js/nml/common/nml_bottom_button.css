@@ -1,0 +1,47 @@
+#container {
+	width: 980px;
+	margin: 0 auto;
+	border: solid 1px blue;
+	text-align: center
+}
+
+img {
+	border: 0
+}
+
+
+
+#roll_top,#roll_bottom {
+	position: relative;
+	cursor: pointer;
+	/*height: 33px;*/
+	height: 70px;
+	width: 23px;
+}
+
+#roll_top {
+	background: url(../../../images/backtop.png) no-repeat;
+	/*background: url(/images/top-bottom.gif) no-repeat 0 33px;*/
+}
+
+#roll_bottom {
+	/*background: url(/images/top-bottom.gif) no-repeat 0 -33px;*/
+}
+#roll {
+
+	display: none;
+	width: 23px;
+	/*margin-right:-700px;*/ /*�����Ǿ�����λ�ã������е�������Ҫʱ��������IE6��hack*/
+	float: left;
+	margin-top: 70px;
+	position: fixed;
+	right: 50%;
+	top: 50%;
+	_position: absolute;
+	_margin-top: 300px;
+	_top: expression(eval(document.documentElement.scrollTop) );
+	
+	right: 10px; 
+	top: 401px; position: fixed; height: 330px; overflow: hidden; width: 24px;
+	
+}

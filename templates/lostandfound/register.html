@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="在哪儿,注册">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>注册 - 在哪儿</title>
+    <script type="text/javascript" src="/static/js/jquery/jquery-1.9.1.js"> </script>
+    <script type="text/javascript" src="/static/js/jquery/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/common/global.js"></script>
+    <script type="text/javascript" src="/static/js/nml/common/nml_head_top.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/main/nml_main.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/nml/common/nml_head_top.css">
+    <link href="/static/css/global.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="/static/css/register/reg.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="all" href="/static/js/jquery/jquery-ui-1.10.2.custom/themes/start/jquery-ui.min.css">
+
+    <script type="text/javascript">
+        // 检测用户名
+        function checkUserName(obj){
+            $("#username-msg-span").css("color","red");
+            // 去掉字符串的首尾空白
+            var username = $.trim($(obj).val());
+            var myreg = /^[a-zA-Z0-9_-]{6,16}$/;
+            if(username == ''){
+                $("#username-msg-span").html("请输入用户名, 长度为6-16位, 为了便于找回, 推荐使用学号");
+                return false;
+            }else if(!myreg.test(username)){
+                $("#username-msg-span").html("无效的用户名, 长度为6-16位, 为了便于找回, 推荐使用学号");
+                return false;
+            }else{
+                var  user = {"username": username};
+                var isValidate = false;
+                $.ajax({
+                    url:"/lostandfound/login/userNameExist.json",
+                    type:"post",
+                    data:user,
+                    dataType:"json",
+                    success:function(result,status){
+                        if(result.isUserNameExist == true){
+                            $("#username-msg-span").html("用户已经存在！");
+                            isValidate = false;
+                            $(obj).focus();
+                        }else{     
+                            $("#username-msg-span").css("color","green");
+                            $("#username-msg-span").html("恭喜：该用户名可以注册！");
+                            isValidate = true;
+                        }
+                    },
+                    error:function(){
+                        isValidate = false;
+                    },
+                });
+                return isValidate ;
+            }
+        }
+
+        // 检测昵称
+        function checkNickName(obj){
+            $("#hypocorism-msg-span").css("color","red");
+            var nickname = $.trim($(obj).val());
+            if(nickname == ''){
+                $("#hypocorism-msg-span").html("请输入昵称！");
+                return false;
+            }else{
+                var user = {"nickname":nickname};
+                var isValidate = false;
+                $.ajax({
+                    url:"/lostandfound/login/nickNameExist.json",
+                    type:"post",
+                    data:user,
+                    dataType:"json",
+                    success:function(result,status){
+                        if(result.isNickNameExist == true){
+                            $("#hypocorism-msg-span").html("昵称已经存在，请重新填写昵称！");
+                            isValidate = false;
+                        }else{
+                            $("#hypocorism-msg-span").css("color","green");
+                            $("#hypocorism-msg-span").html("恭喜：该昵称可以使用！"); 
+                            isValidate = true;
+                        }
+                    },
+                    error:function(){
+                        isValidate = false;
+                    }
+                });
+                return isValidate ;              
+           }
+        }
+
+        // 检测密码
+        function checkPassword(obj){
+            $("#password-msg-span").css("color","red");
+            var password = $.trim($(obj).val());
+            if(password == ''){
+                $("#password-msg-span").html("请输入密码, 密码不能为空!");
+                return false;
+            }else{
+                $("#password-msg-span").html("");
+                return true;
+            }
+        }
+
+        //在此输入密码校验
+        function checkCPassword(obj){
+            $("#c-password-msg-span").css("color","red");
+            var password = $.trim($("#password").val());
+            var cpassword = $.trim($(obj).val());
+            if(cpassword == ''){
+                $("#c-password-msg-span").html("确认密码不能为空!");
+                return false;
+            }else if(password != cpassword){
+                $("#c-password-msg-span").html("密码不一致, 请重新输入!");
+                return false;
+            }else{
+                $("#c-password-msg-span").html("");
+                return true;
+            }
+        }
+
+        $(document).ready(function(){
+            // 注册提交
+            $("#reg_submit").click(function(){
+                
+                var username = $.trim($("#username").val());
+                var nickname = $.trim($("#userRegTable #hypocorism").val());
+
+                var password = $.trim($("#userRegTable #password").val());
+                var c_password = $.trim($("#userRegTable #c_password").val());
+                
+                // 验证表单
+                if(checkUserName($("#username")) != false){
+                    return;
+                }
+                if(checkNickName($("#hypocorism")) != false){
+                    return;
+                }
+                if(password==''){
+                    $("#password").focus();
+                    return false;
+                }
+                if(c_password==''){
+                    $("#c_password").focus();
+                    return false;
+                }
+                if(password!=c_password){
+                    $("#c_password").focus();
+                    return false;
+                }
+
+                var  user = {
+                        "username":username,
+                        "nickname":nickname,
+                        "password":password,
+                };
+                $.ajax({
+                    url:"/lostandfound/login/userRegister.json",
+                    type:"post",
+                    data:user,
+                    dataType:"json",
+                    success:function(result,status){
+                        if(result.isRegisterSuccess == true){
+                            window.location.href="/lostandfound" ;
+                        }else{
+                            $("#username").focus();
+                        }
+                    },
+                    error:function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert("提示");
+                    }
+                });              
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="topest" id="head-top1" style="display: !none; width: 100%">
+        <div class="toph">
+            <span class="fr" id="head-top-right-span" style="margin-right: 10px;">
+                <a href="/lostandfound/register.html"><b class="white">注册</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span>
+                <a onclick="login();" href="#"><b class="white">登录</b></a>
+                <span style="margin-left: 10px; color: gray;">|</span> 
+                <a href="/lostandfound/quickRegGoods.html" target="_blank"><b class="white">快速发布</b></a> 
+            </span>         
+        </div>
+    </div>
+    <br class="clear">
+    <div id="wrap_f" class="clearfix">
+    <!--head-->
+        <div id="header" style="height: auto">
+            <div class="logo">
+                <a href="/lostandfound" class="logoA">
+                    <img src="/static/images/logo.png" alt="寻物启事|失物招领" class="BSHARE_DONTSHARE">
+                    <div style="position:relative;">
+                        <div style="position:absolute; left:150px; top:10px; font-weight:bold; color:#88A6E6;">BETA</div>
+                    </div>
+                </a>
+                <div class="path">
+                    <a href="/lostandfound">首页</a>
+                    <a>&gt;</a>
+                    <a>&gt;</a>
+                    <a>注册</a>
+                </div>
+            </div>
+        </div>
+    <!--end head-->
+        <div style="clear:both;"></div>
+        <div style="border-top: 3px solid #06F;"></div>
+        <div class="content" style="margin-top: 0px;height:520px;float: left;margin-bottom: 55px;">
+        <ul id="userRegTable">
+            <li>
+                <span>*&nbsp; </span>注册用户：
+                <input type="text" name="username" id="username" class="btn_081" maxlength="30" size="" onblur="checkUserName(this);" title="输入登录用户名">
+                <span id="username-msg-span" style="color:#000;">请输入用户名,长度为6-16位, 为了便于找回, 推荐使用学号注册</span>
+            </li>
+            <li>
+                <span>*&nbsp; </span>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 称：
+                <input type="text" name="hypocorism" id="hypocorism" class="btn_081" onblur="checkNickName(this);" title="输入个性昵称">
+                <span id="hypocorism-msg-span"></span>
+            </li>
+            <li>
+                <span>*&nbsp; </span>密&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;码：
+                <input type="password" name="password" id="password" class="btn_081" onblur="checkPassword(this);" title="输入密码">
+                <span id="password-msg-span"></span>
+            </li>
+            <li>
+                <span>*&nbsp; </span>确认密码：
+                <input type="password" name="c_password" id="c_password" class="btn_081" onblur="checkCPassword(this)" title="请再次输入密码">
+                <span id="c-password-msg-span"></span>
+            </li>
+            <li>
+                <input class="btn_07" value="接受协议立即注册" type="button" id="reg_submit" style="margin-top:50px;margin-left:0px;display: inline-block;height:30px">
+            </li>
+        </ul>
+        </div>
+        <div class="side" style="float: left; width: 350px; display: inline; margin-right: 35px;padding: 10px 20px 20px; ">
+            <div class="other" style="padding: 10px 20px 50px 10px; width: 299px; color: #808080; line-height: 2; border: 5px solid #f5f5f5;height: auto;margin-bottom: 15px">
+                <div class="login" style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;">
+                    已经注册过？ <a href="/head-top/headLogin.jspx?nav=login" class="">请登录</a>
+                </div>
+                <div>或者使用合作网站帐号一键登录</div>
+                <div style="margin-left: 0px;margin-top: 15px;white-space: nowrap;margin-bottom: 15px">
+                        <div id="wb_connect_btn" style="float: left;margin-right: 10px"><div class="WB_loginButton WB_widgets"><a href="javascript:void(0);"><img src="http://timg.sjs.sinajs.cn/t4/appstyle/widget/images/loginButton/loginButton_24.png"></a></div></div>
+                        <div id="qq_LoginBtn" style="float: left;  "><a href="javascript:;" onclick="return window.open('https://graph.qq.com/oauth2.0/authorize?client_id=100479159&amp;response_type=token&amp;scope=all&amp;redirect_uri=http%3A%2F%2Fwww.kuaiyixun.com%2Fqq_callback.html', 'oauth2Login_10194' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes');"><img src="http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_3.png" alt="QQ登录" border="0"></a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer">
+        <p></p> 
+        <div style="text-align: center;width:100%">
+            <table width="55%" style="margin:auto">
+                 <tbody>
+                     <tr align="center">
+                        <td><a href="/lostandfound" class="pointer">首页</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript:showAboutUs();" class="pointer">关于我们</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript: showContactUs();" class="pointer">联系我们</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript:showReplyUs();" class="pointer">意见反馈</a></td>
+                        <td>|</td>
+                        <td><a onclick="javascript: disclaimers();" class="pointer">免责声明</a></td>
+                        <td>|</td>
+                        <td><a href="/qa/reg_QA.html" target="_blank" class="pointer">帮助中心</a></td>
+                        <td>|</td> 
+                        <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank">关注我们</a></td>
+                        <td><a href="http://weibo.com/Jcc2" class="pointer" target="_blank" title="官方微博关注"> <img alt="官方微博" src="/static/images/wb-share/wb_LOGO_24x24.png"></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> 
+        </div>      
+        <p></p>
+        <p style="margin-top: 10px;margin-bottom: 15px">在哪儿 Copyright &copy;  2014-2015  <a href="/lostandfound" title="在哪儿 - 寻物启事与失物招领平台">Zainar.com</a>  All rights reserved.    辽ICP证 暂无备号</p> 
+        <p></p>
+    </div>
+    <ul class="ui-autocomplete ui-front ui-menu ui-widget ui-widget-content ui-corner-all" id="ui-id-1" tabindex="0" style="display: none;"></ul>
+</body>
+</html>
