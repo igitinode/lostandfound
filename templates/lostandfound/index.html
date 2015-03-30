@@ -33,7 +33,18 @@
 	<link rel="Shortcut icon" type="image/x-icon" href="/static/images/main/nml-4.ico">
 	<link rel="Bookmark" href="/static/images/main/nml-4.ico">
 	<script type="text/javascript">
-			var $ = jQuery.noConflict();  
+			var $ = jQuery.noConflict(); 
+			$(function(){
+				var numuserinfo = $.cookie("nmluserinfo");
+				if(numuserinfo != null){
+					var infos = numuserinfo.split("$");
+					username = infos[0];
+					nickname = infos[1];
+					password = infos[2];
+					isAutoLogin(username, nickname, password);
+				}
+			});
+
 			$(document).ready(function(){
 				// 控制悬赏区和广告区图片的滚动
 			    $("#xs_pic").zoomImgRollover();

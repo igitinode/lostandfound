@@ -33,4 +33,7 @@ urlpatterns += patterns(
     # 注册请求
     url(r'^login/userRegister.json$', 'userRegister'),
 
+    # Cookie验证
+    url(r'^login/isAutoLogin.json$', 'isAutoLogin'),
+
 )

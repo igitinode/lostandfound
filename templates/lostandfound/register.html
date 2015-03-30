@@ -7,6 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <title>注册 - 在哪儿</title>
     <script type="text/javascript" src="/static/js/jquery/jquery-1.9.1.js"> </script>
+    <script type="text/javascript" src="/static/js/jquery/jquery.cookie.js"> </script>
     <script type="text/javascript" src="/static/js/jquery/jquery-ui-1.10.2.custom/js/jquery-ui-1.10.2.custom.min.js"></script>
     <script type="text/javascript" src="/static/js/common/global.js"></script>
     <script type="text/javascript" src="/static/js/nml/common/nml_head_top.js"></script>
@@ -161,6 +162,7 @@
                     dataType:"json",
                     success:function(result,status){
                         if(result.isRegisterSuccess == true){
+                            $.cookie('nmluserinfo', username+'$'+nickname+'$'+password, {expires:7, path:'/'})
                             window.location.href="/lostandfound" ;
                         }else{
                             $("#username").focus();

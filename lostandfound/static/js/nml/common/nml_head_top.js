@@ -1,67 +1,31 @@
-function isAutoLogin(username, ip, flag) {
+function isAutoLogin(username, nickname, password) {
 		var data = {
 			"username" : username,
-			"ip" : ip,
-			"flag" : flag
+			"nickname" : nickname,
+			"password" : password,
 		};
 		$.ajax({
-			url : "/login/isAutoLogin.json",
+			url : "/lostandfound/login/isAutoLogin.json",
 			data : data,
-			async : false,
+			type:"post",
+			dataType:"json",
 			success : function(result) {
 				//局部 刷新页面
-				// location.href=location.href;
-				//alert(result.isok);
-				// 可以放提示信息 
-				//$("#head-top1").hide();
-
-				//alert(result.user.hypocorism) 
-				$("#head-top-right-span").html(loginHtml());
-				var hypocorism = result.user.hypocorism;
-				if ("${user.loginType}" == "qq") {
-					hypocorism = hypocorism.split("_|_")[0];
+				if (result.isAutoLogin == true){
+					$("#head-top-right-span").html(loginHtml());
+					$("#hypocorism_top").html(nickname);
 				}
-				if (hypocorism!=null&&hypocorism.length >= 14) {
-					hypocorism = hypocorism.substring(0, 14);
-				}
-				$("#hypocorism_top").html(hypocorism);
-				$("#scoreSpan").html("${user.score }");
-				//$("#head-top2").show();
-			}
+			},
 		});
 	}
 
-
 function logout() {
-	$.ajax({
-		url : "/login/logout.json",
-		type : "post",
-		dataType : "json",
-		success : function(result, status) {
-			if (result.isok == 'true') {
-				//如果是微博登录 退出微博登录
-				if ("${user.loginType}" == "sina_weibo") {
-					WB2.logout(function() {
-						//callback function
-					});
-				}
-				//如果是QQ登录 退出登录
-				if ("${user.loginType}" == "qq") {
-					QC.Login.signOut();
-				}
-
-				//清除 自动 登录 cookies
-				$.cookie('nmluserinfo', null);
-				jAlert("安全退出成功！请稍后！", "提示", function() {
-					nml.go("/");
-				});
-				//window.location.href="/";
-
-			}
-		}
+	//清除 自动 登录 cookies
+	$.cookie('nmluserinfo', null, {path:'/'});
+	jAlert("安全退出成功！请稍后！", "提示", function() {
+		window.location.href="/lostandfound";
 	});
 }
-
 
 // 登录重定向 2015/3/28
 function login() {
@@ -101,10 +65,8 @@ function createVisitCode() {
 
 function loginHtml() {
 	var loginHtmlContent = "";
-	loginHtmlContent += "<a href='/goods/forward.jspx?forward=/goods/goods-quick-register&nav=quickReg'  target='_blank' style='float:right'><b  class='white'>快速发布</b></a>";
-	//loginHtmlContent +="<a href='/common/forward.jspx?forward=/twodimentioncode/qrcode&nav=qrcode'  id='qrCreate'  target='_blank' style='float:right'><b  class='white'  class='qr_icon'>手机浏览</b></a>";
-	//loginHtmlContent +="<span style='float:right'><a href='#' onclick='createVisitCode();' id=''   style='color:#gray; display:inline-block;' class='qr_icon pointer'><b  class='white qr_icon'  >获取邀请码</b></a></span>";
-	loginHtmlContent += "<span style='float:right'><a href='/personal/forward.jspx?forward=/personal/p-scorerule-info&nav=p-scorerule-info&action=zhishuguize'      style='color:#gray; display:inline-block;' class='qr_icon pointer'><b  class='white qr_icon'  >快易寻指数(<span id='scoreSpan'>0</span>)</b></a></span>";
+	loginHtmlContent += "<a href='/lostandfound/quickRegGoods.html'  target='_blank' style='float:right'><b  class='white'>快速发布</b></a>";
+	//loginHtmlContent += "<span style='float:right'><a href='/personal/forward.jspx?forward=/personal/p-scorerule-info&nav=p-scorerule-info&action=zhishuguize'      style='color:#gray; display:inline-block;' class='qr_icon pointer'><b  class='white qr_icon'  >快易寻指数(<span id='scoreSpan'>0</span>)</b></a></span>";
 	loginHtmlContent += "<span style='float:right'><a href='/personal/forward.jspx?forward=/personal/p-user-info&nav=p-user-info&action=xiugaitouxiang'><b  class='white'>我的快易寻</b></a><a  id='notReadMsg' href='/personal/forward.jspx?forward=/personal/p-message-info&nav=p-message-info' style='cursor:pointer;' title='进入私信'></a> </span>";
 	loginHtmlContent += "<a href='#' onclick='logout()' style='float:right' ><b  class='white'>[退出]</b></a>";
 	loginHtmlContent += "<span style='float:right'><b  class='white'>您好！</b></span>";
